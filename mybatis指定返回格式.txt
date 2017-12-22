@@ -1,0 +1,59 @@
+高级映射DEMO
+<!-- 查询question & option-->
+<select id="selectQuestionAndOption" parameterType="java.util.Map" resultMap="questionAndOptionStruct">
+	select
+		q.l_questionno l_questionno,
+		q.vc_questioncontent vc_questioncontent,
+		q.c_state question_state,
+		q.l_order question_order,
+		q.c_type c_type,
+		q.c_questiontype c_questiontype,
+		q.c_questionkind c_questionkind,
+		q.vc_productcode vc_productcode,
+		q.c_integrityflag c_integrityflag,
+		o.l_questionno option_questionno,
+		o.l_optionno l_optionno,
+		o.vc_optioncontent vc_optioncontent,
+		o.en_score en_score,
+		o.c_state option_state,
+		o.l_order option_order,
+		o.c_level c_level
+	from
+		sale_tquestionnaire q
+	left outer join sale_tquestionoption o on q.vc_tenantid = o.vc_tenantid and q.l_questionno = o.l_questionno
+	<where>
+		q.vc_tenantid = #{vc_tenantid}
+		<if test="l_questionno != null and l_questionno != ''">
+			and q.l_questionno = #{l_questionno}
+		</if>
+		<if test="c_state != null and c_state != ''">
+			and q.c_state = #{c_state}
+		</if>
+		<if test="c_questionkind != null and c_questionkind != ''">
+			and q.c_questionkind = #{c_questionkind}
+		</if>
+	</where>
+	order by q.l_order, q.l_questionno
+</select>
+
+<!-- Question & Answer 数据结构 -->
+<resultMap id="questionAndOptionStruct" type="java.util.Map">
+	<result property="l_questionno" column="l_questionno"/>
+	<result property="vc_questioncontent" column="vc_questioncontent"/>
+	<result property="c_state" column="question_state"/>
+	<result property="l_order" column="question_order"/>
+	<result property="c_type" column="c_type"/>
+	<result property="c_questiontype" column="c_questiontype"/>
+	<result property="c_questionkind" column="c_questionkind"/>
+	<result property="vc_productcode" column="vc_productcode"/>
+	<result property="c_integrityflag" column="c_integrityflag"/>
+	<collection property="answer" javaType="java.util.ArrayList" ofType="java.util.Map">
+		<result property="l_questionno" column="option_questionno"/>
+		<result property="l_optionno" column="l_optionno"/>
+		<result property="vc_optioncontent" column="vc_optioncontent"/>
+		<result property="en_score" column="en_score"/>
+		<result property="c_state" column="option_state"/>
+		<result property="l_order" column="option_order"/>
+		<result property="c_level" column="c_level"/>
+	</collection>
+</resultMap>
