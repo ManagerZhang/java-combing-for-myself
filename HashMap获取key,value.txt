@@ -1,0 +1,16 @@
+1.获取HashMap中的key，value的两种方式。
+	eg.1: Map map = new HashMap();
+		  Iterator iter = map.entrySet().iterator();
+		  while(iter.hasNext()){
+			Map.Entry entrySet = (Map.Entry)iter.next();
+			Object key = entry.getKey();
+			Object value = entry.getValue();
+		  }
+	eg.2: Map map = new HashMap();
+		  Iterator iter = map.keySet().iterator();
+		  while(iter.hasNext()){
+			Object key = iter.getKey();
+			Object value = map.get(key);
+		  }
+	第一种方式效率高推荐使用。entrySet每次循环只有一对键值对,获取简单。第二种方式iter只有key,获取key之后去map中获取value,因hashMap底层获取时
+	先进行hashCode,在执行equals去获取value,导致获取value时重新遍历了map,遍历两遍。
